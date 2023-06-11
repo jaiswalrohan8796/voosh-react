@@ -14,6 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import axios from "axios";
+
+const URL = process.env.REACT_APP_API_URL;
+
 export default function Login() {
     let navigate = useNavigate();
     let [email, setEmail] = useState("");
@@ -26,16 +29,20 @@ export default function Login() {
     async function handleLogin() {
         try {
             if (email == "" || password == "") {
+                setEmail("");
+                setPassword("");
                 throw new Error("Email & Password required!");
             }
-            let res = await axios.post("http://localhost:8080/login", {
+            let res = await axios.post(`${URL}/login`, {
                 email,
                 password,
             });
             if (res.data.success) {
                 localStorage.setItem("jwt-token", res.data.data.token);
-                navigate("/app");
+                navigate("/");
             } else {
+                setEmail("");
+                setPassword("");
                 throw new Error(res.data.error.message);
             }
         } catch (err) {

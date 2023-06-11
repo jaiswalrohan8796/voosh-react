@@ -15,6 +15,8 @@ import {
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import axios from "axios";
 
+const URL = process.env.REACT_APP_API_URL;
+
 export default function Signup() {
     let navigate = useNavigate();
     let [name, setName] = useState("");
@@ -34,11 +36,14 @@ export default function Signup() {
             !phone ||
             phone == ""
         ) {
-            setError("All fields are required!");
-            return;
+            setName("");
+            setEmail("");
+            setPassword("");
+            setPhone("");
+            throw new Error(res.data.error.message);
         }
         try {
-            let res = await axios.post("http://localhost:8080/signup", {
+            let res = await axios.post(`${URL}/add-user`, {
                 name,
                 email,
                 password,
@@ -47,6 +52,10 @@ export default function Signup() {
             if (res.data.success) {
                 navigate("/login");
             } else {
+                setName("");
+                setEmail("");
+                setPassword("");
+                setPhone("");
                 throw new Error(res.data.error.message);
             }
         } catch (err) {
