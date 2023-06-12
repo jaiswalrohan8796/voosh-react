@@ -17,7 +17,7 @@ import axios from "axios";
 
 const URL = process.env.REACT_APP_API_URL;
 
-export default function Login() {
+export default function Login(props) {
     let navigate = useNavigate();
     let [email, setEmail] = useState("");
     let [password, setPassword] = useState("");
@@ -39,6 +39,7 @@ export default function Login() {
             });
             if (res.data.success) {
                 localStorage.setItem("jwt-token", res.data.data.token);
+                props.authHandler(true);
                 navigate("/");
             } else {
                 setEmail("");

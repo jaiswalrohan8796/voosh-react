@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login.js";
 import Signup from "./Signup.js";
@@ -7,20 +7,24 @@ import Dashboard from "./Dashboard.js";
 import "./style.css";
 
 export default function App() {
-    let isAuthenticated = !!localStorage.getItem("jwt-token");
+    let [isAuthenticate, setAuthenticate] = useState(false);
     return (
         <div>
             <Routes>
-                <Route exact path="/login" element={<Login />} />
+                <Route
+                    exact
+                    path="/login"
+                    element={<Login authHandler={setAuthenticate} />}
+                />
                 <Route exact path="/signup" element={<Signup />} />
                 <Route
                     exact
                     path="/"
                     element={
-                        isAuthenticated ? (
+                        isAuthenticate ? (
                             <Dashboard />
                         ) : (
-                            <Navigate to="login" />
+                            <Navigate to="/login" />
                         )
                     }
                 />
